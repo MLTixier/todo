@@ -2,10 +2,12 @@
 
 @section('content')
     <div class="container">
-        <div>Liste {{ $liste->nom }}</div>
         <ul>
             @foreach ($produits as $produit)
-                <p>{{ $produit->id }} : {{ $produit->nom }}</p>
+                <li>
+                    <input type="checkbox" id="{{ $produit->id }}" name="{{ $produit->id }}" {{ $produit->pivot->est_coche ? 'checked' : '' }} />
+                    <label for="{{ $produit->id }}">{{ $produit->id }} : {{ $produit->nom }}</label>
+                </li>
             @endforeach
         </ul>
     </div>

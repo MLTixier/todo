@@ -49,12 +49,12 @@ class ListeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Liste $liste): \Illuminate\Contracts\View\View
+    public function show(int $id): \Illuminate\Contracts\View\View
     {
+        $liste = Liste::find($id);
         $produits = $liste->produits;
         return view('liste', [
-            'liste' => $liste,
-            'produits' => $produits,
+            'produits' => $produits
         ]);
     }
 

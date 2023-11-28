@@ -16,7 +16,7 @@ class Produit extends Model
 
     public function listes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Liste::class, 'Liste_contient_produits', 'produit_id', 'liste_id');
+        return $this->belongsToMany(Liste::class)->withPivot('est_coche', 'quantite');
     }
 
 }
