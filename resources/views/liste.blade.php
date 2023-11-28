@@ -6,7 +6,7 @@
             @foreach ($produits as $produit)
                 <li>
                     <input type="checkbox" id="{{ $produit->id }}" name="{{ $produit->id }}" {{ $produit->pivot->est_coche ? 'checked' : '' }} />
-                    <label for="{{ $produit->id }}">{{ $produit->id }} : {{ $produit->nom }}</label>
+                    <label for="{{ $produit->id }}">{{ $produit->nom }} - {{ $produit->pivot->quantite }}</label>
                 </li>
             @endforeach
         </ul>
