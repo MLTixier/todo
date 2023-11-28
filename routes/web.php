@@ -6,9 +6,7 @@ use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ProduitController;
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/','listes/1');
 
 Route::resources([
     'listes' => ListeController::class,

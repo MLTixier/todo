@@ -1,17 +1,11 @@
-<!DOCTYPE html>
-    <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.app')
 
-            <title>TODO - mes listes</title>
-        </head>
-        <body>
-            <div>Mes listes :</div>
+@section('content')
+    <div class="container">
         <ul>
             @foreach ($listes as $liste)
-                <p>{{ $liste->id }} : {{ $liste->nom }}</p>
+                <li>{{ $liste->nom }}</li>
             @endforeach
         </ul>
-        </body>
-    </html>
+    </div>
+@endsection
