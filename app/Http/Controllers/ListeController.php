@@ -51,10 +51,11 @@ class ListeController extends Controller
      */
     public function show(int $id): \Illuminate\Contracts\View\View
     {
-        $liste = Liste::find($id);
+        $liste = Liste::findOrFail($id);
         $produits = $liste->produits;
         return view('liste', [
-            'produits' => $produits
+            'liste' => $liste,
+            'produits' => $produits,
         ]);
     }
 
@@ -74,11 +75,34 @@ class ListeController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): \Illuminate\Http\RedirectResponse
     {
-        //
+        $liste = Liste::findOrFail($id);
+        $produits = $liste->produits;
+        if ($request->has('action')) {
+            $action = $request->input('action');
+
+            if ($action === 'sauvegarder') {
+                foreach ($produits as $produit){
+                    $produit_id = $produit->id;
+                    $rules_produit = [
+                        $produit_id.'_est_coche' => 'nullable|string|max:2',
+                        $produit_id.'_quantite' => 'nullable|string|max:100',
+                    ];
+                    $validated = $request->validate($rules_produit);
+                    $liste->produits()->updateExistingPivot($produit_id, [
+                        'est_coche' => array_key_exists($produit_id.'_est_coche',$validated),
+                        'quantite' => $validated[$produit_id.'_quantite'],
+                    ]);
+                }
+            } elseif (substr($action, 0,18) === 'supprimer_produit_') {
+                $produit_id_a_supprimer = substr($action, 18);
+                $liste->produits()->detach($produit_id_a_supprimer);
+            }
+        }
+        return back();
     }
 
     /**
