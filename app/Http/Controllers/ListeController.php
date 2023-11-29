@@ -35,7 +35,7 @@ class ListeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -46,7 +46,7 @@ class ListeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show(int $id): \Illuminate\Contracts\View\View
@@ -62,19 +62,23 @@ class ListeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit($id)
     {
-        //
+        $liste = Liste::findOrFail($id);
+
+        return view('ajoutproduit', [
+            'liste' => $liste,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, int $id): \Illuminate\Http\RedirectResponse
@@ -84,20 +88,26 @@ class ListeController extends Controller
         if ($request->has('action')) {
             $action = $request->input('action');
 
-            if ($action === 'sauvegarder') {
-                foreach ($produits as $produit){
+            if ($action === 'vider_la_liste') {
+                foreach ($produits as $produit) {
+                    $liste->produits()->detach($produit->id);
+                }
+
+            } elseif ($action === 'sauvegarder') {
+                foreach ($produits as $produit) {
                     $produit_id = $produit->id;
                     $rules_produit = [
-                        $produit_id.'_est_coche' => 'nullable|string|max:2',
-                        $produit_id.'_quantite' => 'nullable|string|max:100',
+                        $produit_id . '_est_coche' => 'nullable|string|max:2',
+                        $produit_id . '_quantite' => 'nullable|string|max:100',
                     ];
                     $validated = $request->validate($rules_produit);
                     $liste->produits()->updateExistingPivot($produit_id, [
-                        'est_coche' => array_key_exists($produit_id.'_est_coche',$validated),
-                        'quantite' => $validated[$produit_id.'_quantite'],
+                        'est_coche' => array_key_exists($produit_id . '_est_coche', $validated),
+                        'quantite' => $validated[$produit_id . '_quantite'],
                     ]);
                 }
-            } elseif (substr($action, 0,18) === 'supprimer_produit_') {
+
+            } elseif (substr($action, 0, 18) === 'supprimer_produit_') {
                 $produit_id_a_supprimer = substr($action, 18);
                 $liste->produits()->detach($produit_id_a_supprimer);
             }
@@ -108,10 +118,11 @@ class ListeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public
+    function destroy($id)
     {
         //
     }

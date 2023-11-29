@@ -6,6 +6,9 @@
             @csrf
             @method('PUT')
             <div class="controle_liste">
+                <button type="submit" name="action" value="vider_la_liste">Tout supprimer</button>
+                <button id="bouton_ajouter_produit"><a href="{{ route('listes.edit', ['liste' => $liste]) }}">+</a>
+                </button>
                 <button type="submit" name="action" value="sauvegarder">Sauvegarder</button>
             </div>
             <input name="liste_id" type="hidden" value="{{$liste->id}}"/>
@@ -23,8 +26,8 @@
                             <input class="input-inline" name="{{ $produit->id }}_quantite" type="text"
                                    value="{{ $produit->pivot->quantite }}">
                         </div>
-                        <button type="submit" name="action" value="supprimer_produit_{{ $produit->id }}">X</button>
                     </div>
+                    <button type="submit" name="action" value="supprimer_produit_{{ $produit->id }}">X</button>
                 @endforeach
             </div>
         </form>

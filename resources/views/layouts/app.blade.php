@@ -16,12 +16,17 @@
                 column-gap: 20px;
                 margin-bottom: 20px;
             }
-            .liste_de_produits {
+            .liste_de_produits, {
                 display: flex;
                 flex-direction: column;
                 row-gap: 8px;
                 height: 100px;
                 overflow-y: auto;
+            }
+            .formulaire_nouveau_produit {
+                display: flex;
+                flex-direction: column;
+                row-gap: 8px;
             }
             .produit_dans_liste {
                 display: flex;
@@ -34,6 +39,13 @@
             .produit_nom {
                 width: 180px;
             }
+            .ligne_formulaire_nouveau_produit {
+                display: flex;
+                column-gap: 20px;
+            }
+            .labels_nouveau_produit {
+                width: 150px;
+            }
             .input-inline {
                 border: none;
                 border-bottom: 1px solid black;
@@ -43,6 +55,11 @@
             }
             button{
                 cursor: pointer;
+                width: fit-content;
+            }
+            a {
+                color: inherit;
+                text-decoration: none;
             }
             .bouton {
                 color: buttontext;
@@ -61,16 +78,14 @@
                 border-image: initial;
             }
         </style>
-        <!-- Styles, scripts, etc. -->
     </head>
     <body>
         <nav>
-            <a id="bouton_courses" href="{{ route('listes.show', ['liste' => 1]) }}">Courses</a>
-            <a id="bouton_achats" href="{{ route('listes.show', ['liste' => 2]) }}">Achats</a>
-            <a id="bouton_todo" href="{{ route('listes.show', ['liste' => 3]) }}">To do</a>
+            <button><a id="bouton_courses" href="{{ route('listes.show', ['liste' => 1]) }}">Courses</a></button>
+            <button><a id="bouton_achats" href="{{ route('listes.show', ['liste' => 2]) }}">Achats</a></button>
+            <button><a id="bouton_todo" href="{{ route('listes.show', ['liste' => 3]) }}">To do</a></button>
         </nav>
         <br>
         @yield('content')
-        <!-- Scripts, footer, etc. -->
     </body>
 </html>
