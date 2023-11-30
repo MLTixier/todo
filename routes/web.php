@@ -5,6 +5,7 @@ use App\Http\Controllers\ListeController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ProduitController;
 
+Route::get('/categories/suggestions', [CategorieController::class, 'suggestions'])->name('categories.suggestions');
 
 Route::redirect('/','listes/1');
 

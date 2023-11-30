@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categorie;
 use Illuminate\Http\Request;
 
 class CategorieController extends Controller
@@ -69,6 +70,13 @@ class CategorieController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function suggestions(Request $request)
+    {
+        $query = $request->input('query'); // Récupérez la saisie de l'utilisateur
+        $categories = Categorie::where('nom', 'LIKE', "%$query%")->pluck('nom'); // Requête pour récupérer les suggestions
+        return response()->json($categories); // Renvoyer les suggestions au format JSON
     }
 
     /**
