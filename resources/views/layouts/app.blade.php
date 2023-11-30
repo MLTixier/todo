@@ -77,15 +77,15 @@
                 border-color: buttonborder;
                 border-image: initial;
             }
-            .suggestion_cat{
+            .suggestion{
                 cursor: pointer;
                 width: 180px;
                 padding-inline: 3px;
             }
-            .suggestion_cat:hover{
+            .suggestion:hover{
                 background-color: #cbd5e0;
             }
-            #suggestions_categorie{
+            #suggestions_categorie, #suggestions_produit {
                 margin-left: 170px;
                 margin-top: -5px;
             }

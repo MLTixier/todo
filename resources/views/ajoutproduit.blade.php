@@ -11,8 +11,39 @@
                     <div class="labels_nouveau_produit">
                         <label for="nouveau_nom">Nom du produit :</label>
                     </div>
-                    <input name="nouveau_nom" type="text">
+                    <input type="text" id="produitInput" name="nouveau_produit" autocomplete="off">
                 </div>
+                <div id="suggestions_produit"></div>
+
+                <script>
+                    //script pour afficher des suggestions de produits existants en BDD
+                    const produitInput = document.getElementById('produitInput');
+                    const produitSuggestions = document.getElementById('suggestions_produit');
+                    produitInput.addEventListener('input', function () {
+                        const userInput = produitInput.value;
+                        let tableauSuggestions = [];
+
+                        // Effectuer une requête AJAX pour récupérer les suggestions
+                        fetch(`/produits/suggestions?query=${userInput}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                produitSuggestions.innerHTML = ''; // Nettoyez d'abord la div
+                                data.forEach(suggestion => {
+                                    produitSuggestions.innerHTML += `<div class="suggestion" id="suggestion_prod_${suggestion}">${suggestion}</div>`; // Ajoutez chaque suggestion dans la div
+                                    tableauSuggestions.push(suggestion);
+                                });
+                            })
+                            .then(data => {
+                                tableauSuggestions.forEach(function (suggestion) {
+                                    document.getElementById('suggestion_prod_' + suggestion).addEventListener('click', function () {
+                                        produitInput.value = document.getElementById('suggestion_prod_' + suggestion).innerText; //en cas de clic sur une suggestion, le champ se remplit
+                                        produitSuggestions.innerHTML = ''; //et la liste déroulante disparaît
+                                    });
+                                });
+                            });
+                    });
+                </script>
+
                 <div class="ligne_formulaire_nouveau_produit">
                     <div class="labels_nouveau_produit">
                         <label class="labels_nouveau_produit" for="nouvelle_quantite">Quantité :</label>
@@ -28,8 +59,9 @@
                 <div id="suggestions_categorie"></div>
 
                 <script>
+                    //script pour afficher des suggestions de catégories existantes en BDD
                     const categorieInput = document.getElementById('categorieInput');
-                    const suggestions = document.getElementById('suggestions_categorie');
+                    const categorieSuggestions = document.getElementById('suggestions_categorie');
                     categorieInput.addEventListener('input', function () {
                         const userInput = categorieInput.value;
                         let tableauSuggestions = [];
@@ -38,9 +70,9 @@
                         fetch(`/categories/suggestions?query=${userInput}`)
                             .then(response => response.json())
                             .then(data => {
-                                suggestions.innerHTML = ''; // Nettoyez d'abord la div
+                                categorieSuggestions.innerHTML = ''; // Nettoyez d'abord la div
                                 data.forEach(suggestion => {
-                                    suggestions.innerHTML += `<div class="suggestion_cat" id="suggestion_cat_${suggestion}">${suggestion}</div>`; // Ajoutez chaque suggestion dans la div
+                                    categorieSuggestions.innerHTML += `<div class="suggestion" id="suggestion_cat_${suggestion}">${suggestion}</div>`; // Ajoutez chaque suggestion dans la div
                                     tableauSuggestions.push(suggestion);
                                 });
                             })
@@ -48,7 +80,7 @@
                                 tableauSuggestions.forEach(function (suggestion) {
                                     document.getElementById('suggestion_cat_' + suggestion).addEventListener('click', function () {
                                         categorieInput.value = document.getElementById('suggestion_cat_' + suggestion).innerText; //en cas de clic sur une suggestion, le champ se remplit
-                                        suggestions.innerHTML = ''; //et la liste déroulante disparaît
+                                        categorieSuggestions.innerHTML = ''; //et la liste déroulante disparaît
                                     });
                                 });
                             });

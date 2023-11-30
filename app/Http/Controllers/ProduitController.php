@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Produit;
 use Illuminate\Http\Request;
 
 class ProduitController extends Controller
@@ -69,6 +70,13 @@ class ProduitController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function suggestions(Request $request)
+    {
+        $query = $request->input('query'); // Récupérez la saisie de l'utilisateur
+        $categories = Produit::where('nom', 'LIKE', "%$query%")->pluck('nom'); // Requête pour récupérer les suggestions
+        return response()->json($categories); // Renvoyer les suggestions au format JSON
     }
 
     /**
