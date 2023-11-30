@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categorie;
 use App\Models\Liste;
 use App\Models\Produit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ListeController extends Controller
 {
@@ -85,34 +87,125 @@ class ListeController extends Controller
     {
         $liste = Liste::findOrFail($id);
         $produits = $liste->produits;
-        if ($request->has('action')) {
-            $action = $request->input('action');
 
-            if ($action === 'vider_la_liste') {
-                foreach ($produits as $produit) {
-                    $liste->produits()->detach($produit->id);
+        try {
+            DB::beginTransaction();
+            //réalisation d'opérations sur la BDD.
+
+            if ($request->has('action')) {
+                $action = $request->input('action');
+
+                if ($action === 'vider_la_liste') {
+                    //todo: mettre un message de confirmation
+                    foreach ($produits as $produit) {
+                        $liste->produits()->detach($produit->id);
+                    }
+                    info('la liste ' . $liste->nom . 'a été vidée');
+
+                } elseif ($action === 'sauvegarder') {
+                    $this->sauvegarder_liste($request, $liste);
+
+                } elseif ($action === 'ajouter_produit') {
+                    $this->ajouter_produit_a_liste($request, $liste);
+
+                } elseif (substr($action, 0, 18) === 'supprimer_produit_') {
+                    $this->supprimer_produit_de_liste(substr($action, 18), $liste);
                 }
-
-            } elseif ($action === 'sauvegarder') {
-                foreach ($produits as $produit) {
-                    $produit_id = $produit->id;
-                    $rules_produit = [
-                        $produit_id . '_est_coche' => 'nullable|string|max:2',
-                        $produit_id . '_quantite' => 'nullable|string|max:100',
-                    ];
-                    $validated = $request->validate($rules_produit);
-                    $liste->produits()->updateExistingPivot($produit_id, [
-                        'est_coche' => array_key_exists($produit_id . '_est_coche', $validated),
-                        'quantite' => $validated[$produit_id . '_quantite'],
-                    ]);
-                }
-
-            } elseif (substr($action, 0, 18) === 'supprimer_produit_') {
-                $produit_id_a_supprimer = substr($action, 18);
-                $liste->produits()->detach($produit_id_a_supprimer);
             }
+            $liste->save();
+
+            DB::commit();
+            //toutes les opérations sur le BDD sont terminées.
+
+            return redirect()->route('listes.show', ['liste' => $liste]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            //todo
+            // Une erreur s'est produite lors des opérations de base de données
+            // Gérer l'erreur ou renvoyer une vue d'erreur, par exemple :
+            //return view('erreur');
+            return redirect()->route('listes.show', ['liste' => $liste]);
         }
-        return back();
+
+    }
+
+    public function sauvegarder_liste($request, $liste)
+    {
+        foreach ($liste->produits as $produit) {
+            $produit_id = $produit->id;
+            $rules_produit = [
+                $produit_id . '_est_coche' => 'nullable|string|max:2',
+                $produit_id . '_quantite' => 'nullable|string|max:100',
+            ];
+            $validated = $request->validate($rules_produit);
+            $liste->produits()->updateExistingPivot($produit_id, [
+                'est_coche' => array_key_exists($produit_id . '_est_coche', $validated),
+                'quantite' => $validated[$produit_id . '_quantite'],
+            ]);
+        }
+        info('la liste ' . $liste->nom . 'a été sauvegradée');
+    }
+
+    public function ajouter_produit_a_liste($request, $liste)
+    {
+        $rules_produit = [
+            'nouveau_produit' => 'required|string|max:100',
+            'nouvelle_quantite' => 'nullable|string|max:100',
+            'nouvelle_categorie' => 'nullable|string|max:100',
+        ];
+        $validated = $request->validate($rules_produit);
+
+        $nom_produit = $validated['nouveau_produit']; // Chaîne de recherche
+        $produit = Produit::where('nom', 'LIKE', $nom_produit)->first();
+
+        if ($produit) {
+            // Le produit existe déjà
+            //Vérification de si le produit n'est pas déjà dans la liste :
+            $produitPresent = $liste->produits()->where('produit_id', $produit->id)->exists();
+            if (!$produitPresent) {
+                $liste->produits()->attach($produit->id, ['quantite' => $validated['nouvelle_quantite']]);
+                info('le produit ' . $produit->nom . ' a été ajouté à la liste');
+            } else {
+                //todo: mettre un message d'erreur si le produit est déjà dans la liste (cas else)
+                info('le produit ' . $produit->nom . ' est déja dans la liste.');
+            }
+        } else {
+            // Le produit n'existe pas et doit être créé.
+            info('le produit ' . $produit->nom . ' nexiste pas et doit etre créé');
+
+            $categorie_id = 0;
+            $nom_categorie = $validated['nouvelle_categorie']; // Chaîne de recherche
+            $categorie = Categorie::where('nom', 'LIKE', $nom_categorie)->first();
+
+            if ($categorie) {
+                // La catégorie existe déjà
+                $categorie_id = $categorie->id;
+            } else {
+                // La catégorie n'existe pas et doit être créé.
+                $nouvelleCategorie = Categorie::create([
+                    'nom' => $validated['nouvelle_categorie'],
+                ]);
+                info('la catégorie' . $nouvelleCategorie->nom . 'a été créée');
+                $categorie_id = $nouvelleCategorie->id;
+            }
+
+            //création du nouveau produit et ajout à la liste.
+            $nouveauProduit = Produit::create([
+                'nom' => $validated['nouveau_produit'],
+                'categorie' => $categorie_id,
+            ]);
+            $liste->produits()->attach($nouveauProduit->id, ['quantite' => $validated['nouvelle_quantite']]);
+            info('le nouveau produit ' . $nouveauProduit->nom . ' a été créé et ajouté à la liste');
+        }
+    }
+
+    public function supprimer_produit_de_liste($produit_id_a_supprimer, $liste)
+    {
+        //todo: mettre un message de confirmation
+        $liste->produits()->detach($produit_id_a_supprimer);
+        $produit_nom_a_supp = Produit::findOrFail($produit_id_a_supprimer);
+        info('le produit ' . $produit_nom_a_supp->nom . ' a été enlevé de la liste');
     }
 
     /**

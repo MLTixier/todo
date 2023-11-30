@@ -38,6 +38,7 @@
                                     document.getElementById('suggestion_prod_' + suggestion).addEventListener('click', function () {
                                         produitInput.value = document.getElementById('suggestion_prod_' + suggestion).innerText; //en cas de clic sur une suggestion, le champ se remplit
                                         produitSuggestions.innerHTML = ''; //et la liste déroulante disparaît
+                                        //todo: ajouter la catégorie du produit dans le champ catégorie
                                     });
                                 });
                             });
@@ -87,7 +88,7 @@
                     });
                 </script>
 
-                <button type="submit" name="action" value="sauvegarder">Sauvegarder</button>
+                <button type="submit" name="action" value="ajouter_produit">Sauvegarder</button>
             </div>
     </div>
     </form>

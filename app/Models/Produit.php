@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Produit extends Model
 {
     protected $table = 'Produits';
+    protected $fillable = ['nom', 'categorie'];
+    public $timestamps = false;
 
     public function categorie(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

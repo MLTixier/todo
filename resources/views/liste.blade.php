@@ -12,6 +12,9 @@
                 <button type="submit" name="action" value="sauvegarder">Sauvegarder</button>
             </div>
             <input name="liste_id" type="hidden" value="{{$liste->id}}"/>
+            @if($produits->isEmpty())
+                <p>La liste "{{$liste->nom}}" est vide.</p>
+            @endif
             <div class="liste_de_produits">
                 @foreach ($produits as $produit)
                     <div class="produit_dans_liste">
@@ -26,8 +29,8 @@
                             <input class="input-inline" name="{{ $produit->id }}_quantite" type="text"
                                    value="{{ $produit->pivot->quantite }}">
                         </div>
+                        <button type="submit" name="action" value="supprimer_produit_{{ $produit->id }}">X</button>
                     </div>
-                    <button type="submit" name="action" value="supprimer_produit_{{ $produit->id }}">X</button>
                 @endforeach
             </div>
         </form>

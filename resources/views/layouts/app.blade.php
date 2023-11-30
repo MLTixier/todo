@@ -16,7 +16,7 @@
                 column-gap: 20px;
                 margin-bottom: 20px;
             }
-            .liste_de_produits, {
+            .liste_de_produits{
                 display: flex;
                 flex-direction: column;
                 row-gap: 8px;
@@ -31,7 +31,7 @@
             .produit_dans_liste {
                 display: flex;
                 flex-direction: row;
-                column-gap: 10px;
+                column-gap: 22px;
             }
             .produit_checkbox {
                 width: 20px;
@@ -49,7 +49,6 @@
             .input-inline {
                 border: none;
                 border-bottom: 1px solid black;
-                border-left: 1px solid black;
                 outline: none;
                 padding: 0px 2px;
             }
