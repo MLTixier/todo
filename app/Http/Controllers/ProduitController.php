@@ -46,7 +46,7 @@ class ProduitController extends Controller
      */
     public function show($id)
     {
-        //
+        //todo: pouvoir cliquer sur le produit pour accéder à la fiche du produit si on veut le modifier
     }
 
     /**

@@ -144,7 +144,7 @@ class ListeController extends Controller
                 'quantite' => $validated[$produit_id . '_quantite'],
             ]);
         }
-        info('la liste ' . $liste->nom . 'a été sauvegradée');
+        info('la liste ' . $liste->nom . ' a été sauvegradée');
     }
 
     public function ajouter_produit_a_liste($request, $liste)
@@ -172,7 +172,7 @@ class ListeController extends Controller
             }
         } else {
             // Le produit n'existe pas et doit être créé.
-            info('le produit ' . $produit->nom . ' nexiste pas et doit etre créé');
+            info('le produit ' . $nom_produit . ' nexiste pas et doit etre créé');
 
             $categorie_id = 0;
             $nom_categorie = $validated['nouvelle_categorie']; // Chaîne de recherche
