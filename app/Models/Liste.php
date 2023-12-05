@@ -13,4 +13,9 @@ class Liste extends Model
     {
         return $this->belongsToMany(Produit::class)->withPivot('est_coche', 'quantite');
     }
+
+    public function categories(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Categorie::class);
+    }
 }

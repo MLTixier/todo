@@ -54,7 +54,7 @@ class ListeController extends Controller
     public function show(int $id): \Illuminate\Contracts\View\View
     {
         $liste = Liste::findOrFail($id);
-        $produits = $liste->produits;
+        $produits = $liste->produits->sortBy('categorie');
         return view('liste', [
             'liste' => $liste,
             'produits' => $produits,
@@ -99,6 +99,10 @@ class ListeController extends Controller
                     //todo: mettre un message de confirmation
                     foreach ($produits as $produit) {
                         $liste->produits()->detach($produit->id);
+                        //si $liste = 2 ou 3, les produits associés sont supprimés de la BDD car pas d'intérêt à ce qu'ils y restent.
+                        if ($id !== 1) {
+                            $produit->delete();
+                        }
                     }
                     info('la liste ' . $liste->nom . 'a été vidée');
 
@@ -109,7 +113,9 @@ class ListeController extends Controller
                     $this->ajouter_produit_a_liste($request, $liste);
 
                 } elseif (substr($action, 0, 18) === 'supprimer_produit_') {
-                    $this->supprimer_produit_de_liste(substr($action, 18), $liste);
+                    info(0);
+                    $nom_produit = substr($action, 18);
+                    $this->supprimer_produit_de_liste($nom_produit, $liste);
                 }
             }
             $liste->save();
@@ -121,10 +127,8 @@ class ListeController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            //todo
-            // Une erreur s'est produite lors des opérations de base de données
-            // Gérer l'erreur ou renvoyer une vue d'erreur, par exemple :
-            //return view('erreur');
+            info("Une erreur s'est produite lors des opérations de base de données");
+            info($e);
             return redirect()->route('listes.show', ['liste' => $liste]);
         }
 
@@ -172,7 +176,7 @@ class ListeController extends Controller
             }
         } else {
             // Le produit n'existe pas et doit être créé.
-            info('le produit ' . $nom_produit . ' nexiste pas et doit etre créé');
+            info("le produit " . $nom_produit . " n'existe pas et doit etre créé");
 
             $categorie_id = 0;
             $nom_categorie = $validated['nouvelle_categorie']; // Chaîne de recherche
@@ -185,6 +189,7 @@ class ListeController extends Controller
                 // La catégorie n'existe pas et doit être créé.
                 $nouvelleCategorie = Categorie::create([
                     'nom' => $validated['nouvelle_categorie'],
+                    'liste' => $liste->id,
                 ]);
                 info('la catégorie' . $nouvelleCategorie->nom . 'a été créée');
                 $categorie_id = $nouvelleCategorie->id;
@@ -205,7 +210,13 @@ class ListeController extends Controller
         //todo: mettre un message de confirmation
         $liste->produits()->detach($produit_id_a_supprimer);
         $produit_nom_a_supp = Produit::findOrFail($produit_id_a_supprimer);
-        info('le produit ' . $produit_nom_a_supp->nom . ' a été enlevé de la liste');
+        if ($liste->id !== 1) {
+            $produit = Produit::findOrFail($produit_id_a_supprimer);
+            $produit->delete();
+            info('le produit ' . $produit_nom_a_supp->nom . ' a été enlevé de la liste et supprimé');
+        } else {
+            info('le produit ' . $produit_nom_a_supp->nom . ' a été enlevé de la liste');
+        }
     }
 
     /**

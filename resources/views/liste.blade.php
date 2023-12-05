@@ -1,6 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
+    <!--
+    //todo : changer le style du bouton concerné par la liste visible
+    <script>
+    const button_1 = document.getElementById('bouton_1');
+    button_1.color="blue";
+    const button_2 = document.getElementById('bouton_2');
+    button_2.color="blue";
+    const button_3 = document.getElementById('bouton_3');
+    button_3.color="blue";
+    const selected_list_button = document.getElementById('bouton_'.{{$liste->id}});
+    selected_list_button.color="red";
+</script>
+    -->
     <div class="container">
         <form method="POST" action="{{route('listes.update', ['liste' => $liste])}}">
             @csrf
@@ -23,7 +36,8 @@
                                    name="{{ $produit->id }}_est_coche" {{ $produit->pivot->est_coche ? 'checked' : '' }} />
                         </div>
                         <div class="produit_nom">
-                            <label for="{{ $produit->id }}_est_coche">{{ $produit->nom }}</label>
+                            <label><a
+                                    href="{{ route('produits.show', ['produit' => $produit->id, 'from_liste_id' => $liste->id]) }}">{{ $produit->nom }}</a></label>
                         </div>
                         <div class="produit_quantite">
                             <input class="input-inline" name="{{ $produit->id }}_quantite" type="text"

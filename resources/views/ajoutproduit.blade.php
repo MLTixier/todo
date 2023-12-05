@@ -6,10 +6,12 @@
         <form method="POST" action="{{route('listes.update', ['liste' => $liste])}}">
             @csrf
             @method('PUT')
+            <input type="hidden" id="from_liste" name="from_liste" value="{{$liste->id}}">
+
             <div class="formulaire_nouveau_produit">
                 <div class="ligne_formulaire_nouveau_produit">
                     <div class="labels_nouveau_produit">
-                        <label for="nouveau_nom">Nom du produit :</label>
+                        <label for="nouveau_produit">Nom du produit :</label>
                     </div>
                     <input type="text" id="produitInput" name="nouveau_produit" autocomplete="off">
                 </div>
@@ -17,14 +19,16 @@
 
                 <script>
                     //script pour afficher des suggestions de produits existants en BDD
+                    const from_liste = document.getElementById('from_liste').value;
                     const produitInput = document.getElementById('produitInput');
                     const produitSuggestions = document.getElementById('suggestions_produit');
                     produitInput.addEventListener('input', function () {
                         const userInput = produitInput.value;
+                        const liste = {{ $liste->id }};
                         let tableauSuggestions = [];
 
                         // Effectuer une requête AJAX pour récupérer les suggestions
-                        fetch(`/produits/suggestions?query=${userInput}`)
+                        fetch(`/produits/suggestions?query=${userInput}&liste=${from_liste}`)
                             .then(response => response.json())
                             .then(data => {
                                 produitSuggestions.innerHTML = ''; // Nettoyez d'abord la div
@@ -38,7 +42,15 @@
                                     document.getElementById('suggestion_prod_' + suggestion).addEventListener('click', function () {
                                         produitInput.value = document.getElementById('suggestion_prod_' + suggestion).innerText; //en cas de clic sur une suggestion, le champ se remplit
                                         produitSuggestions.innerHTML = ''; //et la liste déroulante disparaît
+
                                         //todo: ajouter la catégorie du produit dans le champ catégorie
+                                        fetch(`/produit/categorie?query=${suggestion}`)
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                let categorieInput = document.getElementById('categorieInput');
+                                                categorieInput.value = data;
+                                            })
+
                                     });
                                 });
                             });
@@ -51,6 +63,7 @@
                     </div>
                     <input name="nouvelle_quantite" type="text">
                 </div>
+
                 <div class="ligne_formulaire_nouveau_produit">
                     <div class="labels_nouveau_produit">
                         <label class="labels_nouveau_produit" for="nouvelle_categorie">Catégorie :</label>
@@ -61,14 +74,14 @@
 
                 <script>
                     //script pour afficher des suggestions de catégories existantes en BDD
-                    const categorieInput = document.getElementById('categorieInput');
+                    let categorieInput = document.getElementById('categorieInput');
                     const categorieSuggestions = document.getElementById('suggestions_categorie');
                     categorieInput.addEventListener('input', function () {
                         const userInput = categorieInput.value;
                         let tableauSuggestions = [];
 
                         // Effectuer une requête AJAX pour récupérer les suggestions
-                        fetch(`/categories/suggestions?query=${userInput}`)
+                        fetch(`/categories/suggestions?query=${userInput}&liste=${from_liste}`)
                             .then(response => response.json())
                             .then(data => {
                                 categorieSuggestions.innerHTML = ''; // Nettoyez d'abord la div
@@ -89,6 +102,7 @@
                 </script>
 
                 <button type="submit" name="action" value="ajouter_produit">Sauvegarder</button>
+                <button name="action" value="annuler"><a href="{{ route('listes.show', ['liste' => $liste->id]) }}">Annuler</a></button>
             </div>
     </div>
     </form>

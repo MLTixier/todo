@@ -7,11 +7,14 @@ use App\Http\Controllers\ProduitController;
 
 Route::get('/categories/suggestions', [CategorieController::class, 'suggestions'])->name('categories.suggestions');
 Route::get('/produits/suggestions', [ProduitController::class, 'suggestions'])->name('produits.suggestions');
+Route::get('/produit/categorie', [ProduitController::class, 'categorie'])->name('produit.categorie');
 
 Route::redirect('/','listes/1');
 
 Route::resources([
     'listes' => ListeController::class,
     'categories' => CategorieController::class,
-    'produits' => ProduitController::class,
 ]);
+Route::resource('produits', ProduitController::class)->except(['show']);
+
+Route::get('produits/{produit}/from_liste/{from_liste_id}', [ProduitController::class, 'show'])->name('produits.show');

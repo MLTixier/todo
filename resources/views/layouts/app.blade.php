@@ -124,15 +124,24 @@
         #suggestions_categorie, #suggestions_produit {
             color: #2d3748;
         }
+
+        .selected_list_button {
+            color: red;
+        }
+
+        .unselected_list_button {
+            color: blue;
+        }
     </style>
 </head>
 <body>
 <nav>
-    <button><a id="bouton_courses" href="{{ route('listes.show', ['liste' => 1]) }}">Courses</a></button>
-    <button><a id="bouton_achats" href="{{ route('listes.show', ['liste' => 2]) }}">Achats</a></button>
-    <button><a id="bouton_todo" href="{{ route('listes.show', ['liste' => 3]) }}">To do</a></button>
+    <button id="bouton_1" ><a href="{{ route('listes.show', ['liste' => 1]) }}">Courses</a></button>
+    <button id="bouton_2" ><a href="{{ route('listes.show', ['liste' => 2]) }}">Achats</a></button>
+    <button id="bouton_3" ><a href="{{ route('listes.show', ['liste' => 3]) }}">To do</a></button>
 </nav>
 <br>
 @yield('content')
 </body>
 </html>
+
