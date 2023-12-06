@@ -25,7 +25,8 @@
                     <div class="labels_nouveau_produit">
                         <label for="nouveau_produit">Nom du produit :</label>
                     </div>
-                    <input type="text" id="produitInput" name="nouveau_produit" autocomplete="off" value="{{$produit -> nom}}">
+                    <input class="input_nouveau_produit" type="text" id="produitInput" name="nouveau_produit" autocomplete="off"
+                           value="{{$produit -> nom}}">
                 </div>
                 <div id="suggestions_produit"></div>
 
@@ -61,46 +62,55 @@
                 </script>
 
 
-            <div class="ligne_formulaire_nouveau_produit">
-                <div class="labels_nouveau_produit">
-                    <label class="labels_nouveau_produit" for="nouvelle_categorie">Catégorie :</label>
+                <div class="ligne_formulaire_nouveau_produit">
+                    <div class="labels_nouveau_produit">
+                        <label class="labels_nouveau_produit" for="nouvelle_categorie">Catégorie :</label>
+                    </div>
+                    <input class="input_nouveau_produit" type="text" id="categorieInput" name="nouvelle_categorie" autocomplete="off"
+                           value="{{$categorie -> nom}}">
                 </div>
-                <input type="text" id="categorieInput" name="nouvelle_categorie" autocomplete="off" value="{{$categorie -> nom}}">
-            </div>
-            <div id="suggestions_categorie"></div>
+                <div id="suggestions_categorie"></div>
 
-            <script>
-                //script pour afficher des suggestions de catégories existantes en BDD
-                const categorieInput = document.getElementById('categorieInput');
-                const categorieSuggestions = document.getElementById('suggestions_categorie');
-                categorieInput.addEventListener('input', function () {
-                    const userInput = categorieInput.value;
-                    let tableauSuggestions = [];
+                <script>
+                    //script pour afficher des suggestions de catégories existantes en BDD
+                    const categorieInput = document.getElementById('categorieInput');
+                    const categorieSuggestions = document.getElementById('suggestions_categorie');
+                    categorieInput.addEventListener('input', function () {
+                        const userInput = categorieInput.value;
+                        let tableauSuggestions = [];
 
-                    // Effectuer une requête AJAX pour récupérer les suggestions
-                    fetch(`/categories/suggestions?query=${userInput}&liste=${from_liste}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            categorieSuggestions.innerHTML = ''; // Nettoyez d'abord la div
-                            data.forEach(suggestion => {
-                                categorieSuggestions.innerHTML += `<div class="suggestion" id="suggestion_cat_${suggestion}">${suggestion}</div>`; // Ajoutez chaque suggestion dans la div
-                                tableauSuggestions.push(suggestion);
-                            });
-                        })
-                        .then(data => {
-                            tableauSuggestions.forEach(function (suggestion) {
-                                document.getElementById('suggestion_cat_' + suggestion).addEventListener('click', function () {
-                                    categorieInput.value = document.getElementById('suggestion_cat_' + suggestion).innerText; //en cas de clic sur une suggestion, le champ se remplit
-                                    categorieSuggestions.innerHTML = ''; //et la liste déroulante disparaît
+                        // Effectuer une requête AJAX pour récupérer les suggestions
+                        fetch(`/categories/suggestions?query=${userInput}&liste=${from_liste}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                categorieSuggestions.innerHTML = ''; // Nettoyez d'abord la div
+                                data.forEach(suggestion => {
+                                    categorieSuggestions.innerHTML += `<div class="suggestion" id="suggestion_cat_${suggestion}">${suggestion}</div>`; // Ajoutez chaque suggestion dans la div
+                                    tableauSuggestions.push(suggestion);
+                                });
+                            })
+                            .then(data => {
+                                tableauSuggestions.forEach(function (suggestion) {
+                                    document.getElementById('suggestion_cat_' + suggestion).addEventListener('click', function () {
+                                        categorieInput.value = document.getElementById('suggestion_cat_' + suggestion).innerText; //en cas de clic sur une suggestion, le champ se remplit
+                                        categorieSuggestions.innerHTML = ''; //et la liste déroulante disparaît
+                                    });
                                 });
                             });
-                        });
-                });
-            </script>
+                    });
+                </script>
 
-            <button type="submit" name="action" value="modifier_produit">Sauvegarder</button>
-            <button name="action" value="supprimer_produit">Supprimer le produit</button>
-            <button name="action" value="annuler"><a href="{{ route('listes.show', ['liste' => $from_liste]) }}">Annuler</a></button>
+                <div class="controle_liste">
+                    <button type="submit" name="action" value="modifier_produit">
+                        <img class="image_bouton" src="{{ asset('images/save_black.png') }}" alt="sauvegarder">
+                    </button>
+                    <button name="action" value="supprimer_produit">
+                        <img class="image_bouton" src="{{ asset('images/delete_black.png') }}"
+                             alt="supprimer le produit">
+                    </button>
+                    <button name="action" value="annuler"><a href="{{ route('listes.show', ['liste' => $from_liste]) }}"
+                                                             style="font-size: 8vw">X</a></button>
+                </div>
         </form>
     </div>
 @endsection

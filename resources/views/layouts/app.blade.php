@@ -35,7 +35,7 @@
             display: flex;
             flex-direction: column;
             row-gap: 8px;
-            height: 1500px;
+            height: 1000px;
             overflow-y: auto;
         }
 
