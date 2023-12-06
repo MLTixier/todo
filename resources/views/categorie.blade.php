@@ -65,7 +65,7 @@
                         <img class="image_bouton" src="{{ asset('images/delete_black.png') }}"
                              alt="supprimer la categorie">
                     </button>
-                    <button name="action" value="annuler"><a href="{{ route('listes.show', ['liste' => 1]) }}"
+                    <button name="action" value="annuler"><a href="{{ route('categories.index') }}"
                                                              style="font-size: 8vw">X</a></button>
                 </div>
         </form>
