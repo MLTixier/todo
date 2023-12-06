@@ -66,7 +66,7 @@
                              alt="supprimer la categorie">
                     </button>
                     <button name="action" value="annuler"><a href="{{ route('categories.index') }}"
-                                                             style="font-size: 8vw">X</a></button>
+                                                             style="font-size: 8vw"><-</a></button>
                 </div>
         </form>
     </div>

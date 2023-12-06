@@ -109,7 +109,7 @@
                              alt="supprimer le produit">
                     </button>
                     <button name="action" value="annuler"><a href="{{ route('listes.show', ['liste' => $from_liste]) }}"
-                                                             style="font-size: 8vw">X</a></button>
+                                                             style="font-size: 8vw"><-</a></button>
                 </div>
         </form>
     </div>
