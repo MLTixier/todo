@@ -22,9 +22,11 @@
                 <button id="bouton_ajouter_produit"><a href="{{ route('categories.index') }}"
                                                        style="font-size: 8vw">cat</a>
                 </button>
-                <button type="submit" name="action" value="vider_la_liste">
-                    <img class="image_bouton" src="{{ asset('images/delete_black.png') }}" alt="vider la liste">
-                </button>
+                @if($liste->id==1)
+                    <button type="submit" name="action" value="vider_la_liste">
+                        <img class="image_bouton" src="{{ asset('images/delete_black.png') }}" alt="vider la liste">
+                    </button>
+                @endif
                 <button id="bouton_ajouter_produit"><a href="{{ route('listes.edit', ['liste' => $liste]) }}"
                                                        style="font-size: 12vw">+</a>
                 </button>
