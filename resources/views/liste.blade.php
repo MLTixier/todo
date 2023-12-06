@@ -19,10 +19,15 @@
             @csrf
             @method('PUT')
             <div class="controle_liste">
-                <button type="submit" name="action" value="vider_la_liste">Tout supprimer</button>
-                <button id="bouton_ajouter_produit"><a href="{{ route('listes.edit', ['liste' => $liste]) }}">+</a>
+                <button type="submit" name="action" value="vider_la_liste">
+                    <img class="image_bouton" src="{{ asset('images/delete_black.png') }}" alt="vider la liste">
                 </button>
-                <button type="submit" name="action" value="sauvegarder">Sauvegarder</button>
+                <button id="bouton_ajouter_produit"><a href="{{ route('listes.edit', ['liste' => $liste]) }}"
+                                                       style="font-size: 12vw">+</a>
+                </button>
+                <button type="submit" name="action" value="sauvegarder">
+                    <img class="image_bouton" src="{{ asset('images/save_black.png') }}" alt="sauvegarder">
+                </button>
             </div>
             <input name="liste_id" type="hidden" value="{{$liste->id}}"/>
             @if($produits->isEmpty())
@@ -39,11 +44,15 @@
                             <label><a
                                     href="{{ route('produits.show', ['produit' => $produit->id, 'from_liste_id' => $liste->id]) }}">{{ $produit->nom }}</a></label>
                         </div>
-                        <div class="produit_quantite">
-                            <input class="input-inline" name="{{ $produit->id }}_quantite" type="text"
-                                   value="{{ $produit->pivot->quantite }}">
-                        </div>
-                        <button type="submit" name="action" value="supprimer_produit_{{ $produit->id }}">X</button>
+                        @if ($liste->id == 1)
+                            <div class="produit_quantite">
+                                <input class="input-inline" name="{{ $produit->id }}_quantite" type="text"
+                                       value="{{ $produit->pivot->quantite }}">
+                            </div>
+                        @endif
+                        <button class="bouton_supprimer_produit" type="submit" name="action"
+                                value="supprimer_produit_{{ $produit->id }}">X
+                        </button>
                     </div>
                 @endforeach
             </div>

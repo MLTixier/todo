@@ -148,7 +148,7 @@ class ListeController extends Controller
                 'quantite' => $validated[$produit_id . '_quantite'],
             ]);
         }
-        info('la liste ' . $liste->nom . ' a été sauvegradée');
+        info('la liste ' . $liste->nom . ' a été sauvegardée');
     }
 
     public function ajouter_produit_a_liste($request, $liste)

@@ -13,7 +13,7 @@
                     <div class="labels_nouveau_produit">
                         <label for="nouveau_produit">Nom du produit :</label>
                     </div>
-                    <input type="text" id="produitInput" name="nouveau_produit" autocomplete="off">
+                    <input class="input_nouveau_produit" type="text" id="produitInput" name="nouveau_produit" autocomplete="off">
                 </div>
                 <div id="suggestions_produit"></div>
 
@@ -57,18 +57,22 @@
                     });
                 </script>
 
+                @if ($liste->id == 1)
                 <div class="ligne_formulaire_nouveau_produit">
                     <div class="labels_nouveau_produit">
                         <label class="labels_nouveau_produit" for="nouvelle_quantite">Quantité :</label>
                     </div>
-                    <input name="nouvelle_quantite" type="text">
+                    <input class="input_nouveau_produit" name="nouvelle_quantite" type="text">
                 </div>
+                @else
+                    <input type="hidden" name="nouvelle_quantite">
+                @endif
 
                 <div class="ligne_formulaire_nouveau_produit">
                     <div class="labels_nouveau_produit">
                         <label class="labels_nouveau_produit" for="nouvelle_categorie">Catégorie :</label>
                     </div>
-                    <input type="text" id="categorieInput" name="nouvelle_categorie" autocomplete="off">
+                    <input class="input_nouveau_produit" type="text" id="categorieInput" name="nouvelle_categorie" autocomplete="off">
                 </div>
                 <div id="suggestions_categorie"></div>
 
@@ -100,9 +104,14 @@
                             });
                     });
                 </script>
-
-                <button type="submit" name="action" value="ajouter_produit">Sauvegarder</button>
-                <button name="action" value="annuler"><a href="{{ route('listes.show', ['liste' => $liste->id]) }}">Annuler</a></button>
+                <div class="controle_liste">
+                    <button type="submit" name="action" value="ajouter_produit">
+                        <img class="image_bouton" src="{{ asset('images/save_black.png') }}" alt="sauvegarder">
+                    </button>
+                    <button name="action" value="annuler">
+                        <a href="{{ route('listes.show', ['liste' => $liste->id]) }}" style="font-size: 8vw">X</a>
+                    </button>
+                </div>
             </div>
     </div>
     </form>

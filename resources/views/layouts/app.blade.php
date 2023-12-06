@@ -27,15 +27,15 @@
 
         .controle_liste {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 40px;
+            justify-content: space-evenly;
+            margin-bottom: 80px;
         }
 
         .liste_de_produits {
             display: flex;
             flex-direction: column;
             row-gap: 8px;
-            height: 600px;
+            height: 1500px;
             overflow-y: auto;
         }
 
@@ -67,6 +67,12 @@
         .ligne_formulaire_nouveau_produit {
             display: flex;
             flex-direction: column;
+            margin-bottom: 50px;
+        }
+
+        .input_nouveau_produit {
+            height: 100px;
+            margin-top: 20px;
         }
 
         .labels_nouveau_produit {
@@ -87,7 +93,8 @@
 
         button {
             cursor: pointer;
-            width: fit-content;
+            width: 160px;
+            height: 160px;
         }
 
         a {
@@ -112,6 +119,11 @@
             border-image: initial;
         }
 
+        .bouton_supprimer_produit{
+            width: 60px;
+            height: 60px;
+        }
+
         .suggestion {
             cursor: pointer;
             padding-inline: 3px;
@@ -131,6 +143,10 @@
 
         .unselected_list_button {
             color: blue;
+        }
+
+        .image_bouton {
+            width: 80px;
         }
     </style>
 </head>
