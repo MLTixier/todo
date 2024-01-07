@@ -55,9 +55,12 @@ class ListeController extends Controller
     {
         $liste = Liste::findOrFail($id);
         $produits = $liste->produits->sortBy('categorie');
+        $categoriesIds = $liste->produits->pluck('categorie')->unique();
+        $categories = Categorie::whereIn('id', $categoriesIds)->get();
         return view('liste', [
             'liste' => $liste,
             'produits' => $produits,
+            'categories' => $categories,
         ]);
     }
 

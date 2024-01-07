@@ -39,7 +39,9 @@
                 <p>La liste "{{$liste->nom}}" est vide.</p>
             @endif
             <div class="liste_de_produits">
-                @foreach ($produits as $produit)
+                @foreach ($categories as $categorie)
+                    <p>{{ $categorie->nom }}</p>
+                @foreach ($produits->where('categorie', $categorie->id) as $produit)
                     <div class="produit_dans_liste">
                         <div class="produit_checkbox">
                             <input type="checkbox"
@@ -59,6 +61,7 @@
                                 value="supprimer_produit_{{ $produit->id }}">X
                         </button>
                     </div>
+                @endforeach
                 @endforeach
             </div>
         </form>
