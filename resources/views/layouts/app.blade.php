@@ -148,6 +148,23 @@
         .image_bouton {
             width: 80px;
         }
+
+        .select-cursor{
+            width: 60px;
+            height: 30px;
+            margin-top: 60px;
+        }
+
+        .input_et_filtre{
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .suggestions {
+            margin-top: -60px;
+            margin-left: 20px;
+        }
+
     </style>
 </head>
 <body>

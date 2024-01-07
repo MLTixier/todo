@@ -13,20 +13,20 @@
                     <div class="labels_nouveau_produit">
                         <label for="nouveau_produit">Nom du produit :</label>
                     </div>
-                    <input class="input_nouveau_produit" type="text" id="produitInput" name="nouveau_produit" autocomplete="off">
+                    <div class="input_et_filtre">
+                        <input class="input_nouveau_produit" type="text" id="produitInput" name="nouveau_produit"
+                               autocomplete="off">
+                        <img id="select-cursor-produit" class="select-cursor"
+                             src="{{ asset('images/select-cursor.png') }}">
+                    </div>
                 </div>
-                <div id="suggestions_produit"></div>
+                <div class="suggestions" id="suggestions_produit"></div>
 
                 <script>
-                    //script pour afficher des suggestions de produits existants en BDD
                     const from_liste = document.getElementById('from_liste').value;
-                    const produitInput = document.getElementById('produitInput');
                     const produitSuggestions = document.getElementById('suggestions_produit');
-                    produitInput.addEventListener('input', function () {
-                        const userInput = produitInput.value;
-                        const liste = {{ $liste->id }};
+                    lookForSuggestionsProduit = function (userInput) {
                         let tableauSuggestions = [];
-
                         // Effectuer une requête AJAX pour récupérer les suggestions
                         fetch(`/produits/suggestions?query=${userInput}&liste=${from_liste}`)
                             .then(response => response.json())
@@ -43,7 +43,6 @@
                                         produitInput.value = document.getElementById('suggestion_prod_' + suggestion).innerText; //en cas de clic sur une suggestion, le champ se remplit
                                         produitSuggestions.innerHTML = ''; //et la liste déroulante disparaît
 
-                                        //todo: ajouter la catégorie du produit dans le champ catégorie
                                         fetch(`/produit/categorie?query=${suggestion}`)
                                             .then(response => response.json())
                                             .then(data => {
@@ -54,16 +53,33 @@
                                     });
                                 });
                             });
+                    };
+
+                    //script pour afficher/masquer toutes les suggestions de produits existants en BDD au clic sur le curseur
+                    const cursorProduit = document.getElementById('select-cursor-produit');
+                    cursorProduit.addEventListener('click', function () {
+                        if (produitSuggestions.innerHTML === '') {
+                            lookForSuggestionsProduit(' ');
+                        } else {
+                            produitSuggestions.innerHTML = '';
+                        }
+                    });
+
+                    //script pour afficher des suggestions de produits existants en BDD
+                    const produitInput = document.getElementById('produitInput');
+                    produitInput.addEventListener('input', function () {
+                        const userInput = produitInput.value;
+                        lookForSuggestionsProduit(userInput);
                     });
                 </script>
 
                 @if ($liste->id == 1)
-                <div class="ligne_formulaire_nouveau_produit">
-                    <div class="labels_nouveau_produit">
-                        <label class="labels_nouveau_produit" for="nouvelle_quantite">Quantité :</label>
+                    <div class="ligne_formulaire_nouveau_produit">
+                        <div class="labels_nouveau_produit">
+                            <label class="labels_nouveau_produit" for="nouvelle_quantite">Quantité :</label>
+                        </div>
+                        <input class="input_nouveau_produit" name="nouvelle_quantite" type="text">
                     </div>
-                    <input class="input_nouveau_produit" name="nouvelle_quantite" type="text">
-                </div>
                 @else
                     <input type="hidden" name="nouvelle_quantite">
                 @endif
@@ -72,18 +88,20 @@
                     <div class="labels_nouveau_produit">
                         <label class="labels_nouveau_produit" for="nouvelle_categorie">Catégorie :</label>
                     </div>
-                    <input class="input_nouveau_produit" type="text" id="categorieInput" name="nouvelle_categorie" autocomplete="off">
+                    <div class="input_et_filtre">
+                        <input class="input_nouveau_produit" type="text" id="categorieInput" name="nouvelle_categorie"
+                               autocomplete="off">
+                        <img id="select-cursor-categorie" class="select-cursor"
+                             src="{{ asset('images/select-cursor.png') }}">
+                    </div>
                 </div>
-                <div id="suggestions_categorie"></div>
+                <div class="suggestions" id="suggestions_categorie"></div>
 
                 <script>
-                    //script pour afficher des suggestions de catégories existantes en BDD
-                    let categorieInput = document.getElementById('categorieInput');
                     const categorieSuggestions = document.getElementById('suggestions_categorie');
-                    categorieInput.addEventListener('input', function () {
-                        const userInput = categorieInput.value;
-                        let tableauSuggestions = [];
 
+                    function lookForSuggestionsCategorie(userInput) {
+                        let tableauSuggestions = [];
                         // Effectuer une requête AJAX pour récupérer les suggestions
                         fetch(`/categories/suggestions?query=${userInput}&liste=${from_liste}`)
                             .then(response => response.json())
@@ -102,8 +120,26 @@
                                     });
                                 });
                             });
+                    }
+
+                    //script pour afficher/masquer toutes les suggestions de categories existantes en BDD au clic sur le curseur
+                    const cursorCategorie = document.getElementById('select-cursor-categorie');
+                    cursorCategorie.addEventListener('click', function () {
+                        if (categorieSuggestions.innerHTML === '') {
+                            lookForSuggestionsCategorie(' ');
+                        } else {
+                            categorieSuggestions.innerHTML = '';
+                        }
+                    });
+
+                    //script pour afficher des suggestions de catégories existantes en BDD
+                    let categorieInput = document.getElementById('categorieInput');
+                    categorieInput.addEventListener('input', function () {
+                        const userInput = categorieInput.value;
+                        lookForSuggestionsCategorie(userInput);
                     });
                 </script>
+
                 <div class="controle_liste">
                     <button type="submit" name="action" value="ajouter_produit">
                         <img class="image_bouton" src="{{ asset('images/save_black.png') }}" alt="sauvegarder">
