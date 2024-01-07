@@ -24,7 +24,7 @@
                         <label class="labels_nouveau_produit" for="liste_categorie">appartient à la liste :</label>
                     </div>
                     <input class="input_nouveau_produit" type="text" id="listeCategorieInput" name="liste_categorie"
-                           value="{{ ($listes->where('id', $categorie->id)->first)->nom->nom}}">
+                           value="{{$listes->where('id', $categorie ->liste )->first->nom->nom}}">
                 </div>
 
                 <script>
@@ -68,11 +68,12 @@
                              alt="supprimer la categorie">
                     </button>
                     @if($from_liste == 0)
-                    <button name="action" value="annuler"><a href="{{ route('categories.index') }}"
-                                                             style="font-size: 8vw"><-</a></button>
+                        <button name="action" value="annuler"><a href="{{ route('categories.index') }}"
+                                                                 style="font-size: 8vw"><-</a></button>
                     @else
-                    <button name="action" value="annuler"><a href="{{ route('listes.show', ['liste' => $from_liste]) }}"
-                            style="font-size: 8vw"><-</a></button>
+                        <button name="action" value="annuler"><a
+                                href="{{ route('listes.show', ['liste' => $from_liste]) }}"
+                                style="font-size: 8vw"><-</a></button>
                     @endif
                 </div>
 
