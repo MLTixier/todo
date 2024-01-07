@@ -163,6 +163,7 @@
         .suggestions {
             margin-top: -60px;
             margin-left: 20px;
+            font-size: 4vw;
         }
 
     </style>
