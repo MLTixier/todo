@@ -23,8 +23,8 @@
                                                        style="font-size: 8vw">cat</a>
                 </button>
                 @if($liste->id==1)
-                    <button type="submit" name="action" value="vider_la_liste">
-                        <img class="image_bouton" src="{{ asset('images/delete_black.png') }}" alt="vider la liste">
+                    <button type="submit" name="action" value="vider_la_liste" onclick="return confirmDelete()">
+                        <img class="image_bouton" id="delete-list" src="{{ asset('images/delete_black.png') }}" alt="vider la liste">
                     </button>
                 @endif
                 <button id="bouton_ajouter_produit"><a href="{{ route('listes.edit', ['liste' => $liste]) }}"
@@ -34,6 +34,13 @@
                     <img class="image_bouton" src="{{ asset('images/save_black.png') }}" alt="sauvegarder">
                 </button>
             </div>
+
+            <script>
+                function confirmDelete() {
+                    return confirm("Êtes-vous sûr de vouloir supprimer cette liste ?"); // Si l'utilisateur confirme, le formulaire sera soumis ; sinon, il ne le sera pas
+                }
+            </script>
+
             <input name="liste_id" type="hidden" value="{{$liste->id}}"/>
             @if($produits->isEmpty())
                 <p>La liste "{{$liste->nom}}" est vide.</p>
