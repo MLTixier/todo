@@ -45,6 +45,7 @@ class ProduitController extends Controller
      * Display the specified resource.
      *
      * @param int $id
+     * @param int $from_liste_id
      * @return \Illuminate\Http\Response
      */
     public function show(int $id, int $from_liste_id): \Illuminate\Contracts\View\View

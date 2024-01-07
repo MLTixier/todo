@@ -12,7 +12,8 @@
                     <div class="labels_nouveau_produit">
                         <label for="nom_categorie">Nom de la catégorie :</label>
                     </div>
-                    <input class="input_nouveau_produit" type="text" id="categorieInput" name="categorie" autocomplete="off"
+                    <input class="input_nouveau_produit" type="text" id="categorieInput" name="categorie"
+                           autocomplete="off"
                            value="{{$categorie -> nom}}">
                 </div>
 
@@ -23,13 +24,13 @@
                         <label class="labels_nouveau_produit" for="liste_categorie">appartient à la liste :</label>
                     </div>
                     <input class="input_nouveau_produit" type="text" id="listeCategorieInput" name="liste_categorie"
-                           value="{{$categorie -> liste}}">
+                           value="{{ ($listes->where('id', $categorie->id)->first)->nom->nom}}">
                 </div>
 
                 <script>
                     //script pour afficher des suggestions de catégories existantes en BDD
 
-                    const from_liste =  document.getElementById('listeCategorieInput').value;
+                    const from_liste = document.getElementById('listeCategorieInput').value;
                     const categorieInput = document.getElementById('categorieInput');
                     const categorieSuggestions = document.getElementById('suggestions_categorie');
                     categorieInput.addEventListener('input', function () {
@@ -57,6 +58,7 @@
                     });
                 </script>
 
+
                 <div class="controle_liste">
                     <button type="submit" name="action" value="modifier_categorie">
                         <img class="image_bouton" src="{{ asset('images/save_black.png') }}" alt="sauvegarder">
@@ -65,9 +67,16 @@
                         <img class="image_bouton" src="{{ asset('images/delete_black.png') }}"
                              alt="supprimer la categorie">
                     </button>
+                    @if($from_liste == 0)
                     <button name="action" value="annuler"><a href="{{ route('categories.index') }}"
                                                              style="font-size: 8vw"><-</a></button>
+                    @else
+                    <button name="action" value="annuler"><a href="{{ route('listes.show', ['liste' => $from_liste]) }}"
+                            style="font-size: 8vw"><-</a></button>
+                    @endif
                 </div>
+
+
         </form>
     </div>
 @endsection

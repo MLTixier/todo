@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categorie;
+use App\Models\Liste;
 use App\Models\Produit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -48,14 +49,18 @@ class CategorieController extends Controller
      * Display the specified resource.
      *
      * @param int $id
+     * @param int $from_liste_id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function show($id)
+    public function show(int $id, int $from_liste_id)
     {
 
         $categorie = Categorie::findOrFail($id);
+        $listes = Liste::All()->sortBy('id');
         return view('categorie', [
             'categorie' => $categorie,
+            'listes' => $listes,
+            'from_liste' => $from_liste_id,
         ]);
     }
 

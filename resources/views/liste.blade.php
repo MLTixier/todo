@@ -24,7 +24,7 @@
                 </button>
                 @if($liste->id==1)
                     <button type="submit" name="action" value="vider_la_liste">
-                        <img class="image_bouton" src="{{ asset('images/delete_test.svg') }}" alt="vider la liste">
+                        <img class="image_bouton" src="{{ asset('images/delete_black.png') }}" alt="vider la liste">
                     </button>
                 @endif
                 <button id="bouton_ajouter_produit"><a href="{{ route('listes.edit', ['liste' => $liste]) }}"
@@ -40,7 +40,8 @@
             @endif
             <div class="liste_de_produits">
                 @foreach ($categories as $categorie)
-                    <p>{{ $categorie->nom }}</p>
+                    <p><a
+                            href="{{ route('categories.show', ['category' => $categorie->id, 'from_liste_id' => $liste->id]) }}">{{ $categorie->nom }}</a></p>
                 @foreach ($produits->where('categorie', $categorie->id) as $produit)
                     <div class="produit_dans_liste">
                         <div class="produit_checkbox">

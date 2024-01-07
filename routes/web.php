@@ -13,8 +13,9 @@ Route::redirect('/','listes/1');
 
 Route::resources([
     'listes' => ListeController::class,
-    'categories' => CategorieController::class,
 ]);
 Route::resource('produits', ProduitController::class)->except(['show']);
+Route::resource('categories', CategorieController::class)->except(['show']);
 
 Route::get('produits/{produit}/from_liste/{from_liste_id}', [ProduitController::class, 'show'])->name('produits.show');
+Route::get('categories/{category}/from_liste/{from_liste_id}', [CategorieController::class, 'show'])->name('categories.show');
