@@ -109,6 +109,18 @@ class ListeController extends Controller
                     }
                     info('la liste ' . $liste->nom . 'a été vidée');
 
+                } elseif ($action === 'vider_les_repas') {
+                    foreach ($produits as $produit) {
+                        $produit->categorie=32;
+                        $produit->pivot->quantite=null;
+                        $produit->save();
+                        $produit->pivot->save();
+                    }
+
+                } elseif (substr($action, 0, 26) === 'passer_en_semaine_produit_') {
+                    $nom_produit = substr($action, 26);
+                    $this->passer_repas_en_semaine($nom_produit);
+
                 } elseif ($action === 'sauvegarder') {
                     $this->sauvegarder_liste($request, $liste);
 
@@ -220,6 +232,17 @@ class ListeController extends Controller
         } else {
             info('le produit ' . $produit_nom_a_supp->nom . ' a été enlevé de la liste');
         }
+    }
+
+    public function passer_repas_en_semaine($produit_id)
+    {
+        $produit = Produit::findOrFail($produit_id);
+        if ($produit->categorie == 31){
+            $produit->categorie = 32;
+        } elseif ($produit->categorie == 32){
+            $produit->categorie = 31;
+        }
+        $produit->save();
     }
 
     /**

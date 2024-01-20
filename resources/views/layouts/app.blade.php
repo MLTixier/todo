@@ -19,8 +19,8 @@
         }
 
         nav button {
-            width: 230px;
-            padding: 20px;
+            width: 180px;
+            padding: 5px;
             background-color: dimgrey;
             color: white;
         }
@@ -171,6 +171,7 @@
 <body>
 <nav>
     <button id="bouton_1" ><a href="{{ route('listes.show', ['liste' => 1]) }}">Courses</a></button>
+    <button id="bouton_4" ><a href="{{ route('listes.show', ['liste' => 4]) }}">Repas</a></button>
     <button id="bouton_2" ><a href="{{ route('listes.show', ['liste' => 2]) }}">Achats</a></button>
     <button id="bouton_3" ><a href="{{ route('listes.show', ['liste' => 3]) }}">To do</a></button>
 </nav>

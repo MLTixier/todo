@@ -27,6 +27,11 @@
                         <img class="image_bouton" id="delete-list" src="{{ asset('images/delete_black.png') }}" alt="vider la liste">
                     </button>
                 @endif
+                @if($liste->id==4)
+                    <button type="submit" name="action" value="vider_les_repas" onclick="return confirmDelete()">
+                        <img class="image_bouton" id="delete-repas" src="{{ asset('images/delete_black.png') }}" alt="vider les repas">
+                    </button>
+                @endif
                 <button id="bouton_ajouter_produit"><a href="{{ route('listes.edit', ['liste' => $liste]) }}"
                                                        style="font-size: 12vw">+</a>
                 </button>
@@ -59,15 +64,22 @@
                             <label><a
                                     href="{{ route('produits.show', ['produit' => $produit->id, 'from_liste_id' => $liste->id]) }}">{{ $produit->nom }}</a></label>
                         </div>
-                        @if ($liste->id == 1)
+                        @if ($liste->id == 1 || $liste->id == 4)
                             <div class="produit_quantite">
                                 <input class="input-inline" name="{{ $produit->id }}_quantite" type="text"
                                        value="{{ $produit->pivot->quantite }}">
                             </div>
                         @endif
+                        @if ($liste->id != 4)
                         <button class="bouton_supprimer_produit" type="submit" name="action"
                                 value="supprimer_produit_{{ $produit->id }}">X
                         </button>
+                        @endif
+                        @if ($liste->id == 4)
+                            <button class="bouton_supprimer_produit" type="submit" name="action"
+                                    value="passer_en_semaine_produit_{{ $produit->id }}">O
+                            </button>
+                        @endif
                     </div>
                 @endforeach
                 @endforeach
